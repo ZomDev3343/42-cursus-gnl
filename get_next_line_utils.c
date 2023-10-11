@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/10 16:25:14 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/11 15:29:27 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,12 @@ void	lstadd_back(t_list **head, t_list *elem)
 	cur->next = elem;
 }
 
-/* Construct a string from memory space and replace 'EOF' by '\0' for correct string */
+/* Construct a string from memory space and
+replace 'EOF' by '\0' for correct string */
 char	*makestr(void *data, size_t size)
 {
-	char	*res;
-	size_t	i;
+	char			*res;
+	size_t			i;
 	unsigned char	has_eof;
 
 	i = 0;
