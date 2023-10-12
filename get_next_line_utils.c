@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/11 15:29:27 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/12 17:18:12 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,24 +44,20 @@ void	lstadd_back(t_list **head, t_list *elem)
 	cur->next = elem;
 }
 
-/* Construct a string from memory space and
-replace 'EOF' by '\0' for correct string */
-char	*makestr(void *data, size_t size)
+void	ft_lstclear(t_list **lst)
 {
-	char			*res;
-	size_t			i;
-	unsigned char	has_eof;
+	t_list	*cur;
+	t_list	*tmp;
 
-	i = 0;
-	has_eof = (((char *)data)[size] == (char)-1);
-	res = (char *) malloc(size + !has_eof);
-	res[size] = 0;
-	while (i < size - has_eof)
+	cur = *lst;
+	while (cur)
 	{
-		res[i] = ((unsigned char *) data)[i];
-		i++;
+		tmp = cur->next;
+		free(tmp->data);
+		free(tmp);
+		cur = tmp;
 	}
-	return (res);
+	*lst = 0;
 }
 
 /* Make a copy of str which is 'len' characters long */
