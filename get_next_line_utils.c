@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/12 17:18:12 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/13 15:07:23 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	lstadd_back(t_list **head, t_list *elem)
 	cur->next = elem;
 }
 
-void	ft_lstclear(t_list **lst)
+void	lstclear(t_list **lst)
 {
 	t_list	*cur;
 	t_list	*tmp;
@@ -53,15 +53,15 @@ void	ft_lstclear(t_list **lst)
 	while (cur)
 	{
 		tmp = cur->next;
-		free(tmp->data);
-		free(tmp);
+		free(cur->data);
+		free(cur);
 		cur = tmp;
 	}
 	*lst = 0;
 }
 
 /* Make a copy of str which is 'len' characters long */
-char	*strdup(char *str, ssize_t len)
+char	*ft_strdup(char *str, ssize_t len)
 {
 	char	*res;
 
@@ -69,5 +69,20 @@ char	*strdup(char *str, ssize_t len)
 	res[len] = 0;
 	while (--len >= 0)
 		res[len] = ((unsigned char *) str)[len];
+	return (res);
+}
+
+void	*ft_calloc(size_t size, size_t len)
+{
+	void	*res;
+	size_t	i;
+
+	i = 0;
+	res = malloc(size * len);
+	while (i < size * len)
+	{
+		((unsigned char *) res)[i] = (unsigned char) 0;
+		i++;
+	}
 	return (res);
 }
