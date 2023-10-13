@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/09 13:25:11 by truello           #+#    #+#             */
-/*   Updated: 2023/10/13 15:05:18 by truello          ###   ########.fr       */
+/*   Created: 2023/10/13 15:44:22 by truello           #+#    #+#             */
+/*   Updated: 2023/10/13 16:03:48 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,9 @@ typedef struct s_list
 }	t_list;
 
 char	*get_next_line(int fd);
-ssize_t	is_line(char *str, ssize_t len);
-char	*make_final_str(t_list *line);
-ssize_t	get_final_len(t_list *line);
-char	*get_reste_str(char *str, ssize_t *read_size);
 
-t_list	*lstnew(char *data, ssize_t read_size);
-void	lstadd_back(t_list **head, t_list *elem);
-void	lstclear(t_list **lst);
-char	*ft_strdup(char *str, ssize_t len);
 void	*ft_calloc(size_t size, size_t len);
+void	lst_push_back(t_list **head, t_list *elem);
+void	lst_clear(t_list **head);
 
 #endif

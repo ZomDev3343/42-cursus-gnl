@@ -6,37 +6,37 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/13 15:07:23 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/13 16:06:44 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/* Creates a new list element with a data and its size */
-t_list	*lstnew(char *data, ssize_t read_size)
+void	*ft_calloc(size_t size, size_t len)
 {
-	t_list	*elem;
+	void	*res;
+	size_t total;
+	size_t	i;
 
-	if (!data)
-		return (NULL);
-	elem = (t_list *) malloc(sizeof(t_list));
-	elem->data = data;
-	elem->read_size = read_size;
-	elem->next = 0;
-	return (elem);
+	i = 0;
+	total = size * len;
+	res = malloc(total);
+	while (i < total)
+	{
+		((unsigned char *) res)[i] = 0;
+		i++;
+	}
+	return (res);
 }
 
-/* Adds an elements at the end of a list or set the list if empty */
-void	lstadd_back(t_list **head, t_list *elem)
+void	lst_push_back(t_list **head, t_list *elem)
 {
 	t_list	*cur;
 
-	if (!head)
-		return ;
 	cur = *head;
-	if (!*head)
+	if (!cur)
 	{
-		*head = elem;
+		cur = elem;
 		return ;
 	}
 	while (cur->next)
@@ -44,12 +44,12 @@ void	lstadd_back(t_list **head, t_list *elem)
 	cur->next = elem;
 }
 
-void	lstclear(t_list **lst)
+void	lst_clear(t_list **head)
 {
 	t_list	*cur;
 	t_list	*tmp;
 
-	cur = *lst;
+	cur = *head;
 	while (cur)
 	{
 		tmp = cur->next;
@@ -57,32 +57,5 @@ void	lstclear(t_list **lst)
 		free(cur);
 		cur = tmp;
 	}
-	*lst = 0;
-}
-
-/* Make a copy of str which is 'len' characters long */
-char	*ft_strdup(char *str, ssize_t len)
-{
-	char	*res;
-
-	res = (char *) malloc(len + 1);
-	res[len] = 0;
-	while (--len >= 0)
-		res[len] = ((unsigned char *) str)[len];
-	return (res);
-}
-
-void	*ft_calloc(size_t size, size_t len)
-{
-	void	*res;
-	size_t	i;
-
-	i = 0;
-	res = malloc(size * len);
-	while (i < size * len)
-	{
-		((unsigned char *) res)[i] = (unsigned char) 0;
-		i++;
-	}
-	return (res);
+	*head = 0;
 }
