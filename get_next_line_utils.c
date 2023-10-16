@@ -6,24 +6,34 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/13 16:06:44 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/16 12:06:05 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	*ft_calloc(size_t size, size_t len)
+t_list	*lstnew(char *data, ssize_t read_size)
 {
-	void	*res;
-	size_t total;
-	size_t	i;
+	t_list	*res;
 
+	res = (t_list *) malloc(sizeof(t_list));
+	if (!res)
+		return (NULL);
+	res->data = data;
+	res->read_size = read_size;
+	return (res);
+}
+
+char	*strdupl(char *str, ssize_t read_size)
+{
+	ssize_t	i;
+	char	*res;
+
+	res = (char *) malloc(read_size);
 	i = 0;
-	total = size * len;
-	res = malloc(total);
-	while (i < total)
+	while (i < read_size)
 	{
-		((unsigned char *) res)[i] = 0;
+		res[i] = (unsigned char) str[i];
 		i++;
 	}
 	return (res);
@@ -36,7 +46,7 @@ void	lst_push_back(t_list **head, t_list *elem)
 	cur = *head;
 	if (!cur)
 	{
-		cur = elem;
+		*head = elem;
 		return ;
 	}
 	while (cur->next)
