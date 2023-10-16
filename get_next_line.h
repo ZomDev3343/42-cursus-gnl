@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:44:22 by truello           #+#    #+#             */
-/*   Updated: 2023/10/16 11:56:29 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/16 14:35:20 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ char	*get_next_line(int fd);
 void	lst_push_back(t_list **head, t_list *elem);
 void	lst_clear(t_list **head);
 t_list	*lstnew(char *data, ssize_t read_size);
-char	*strdupl(char *str, ssize_t read_size);
+char	*strdupl(char *str, ssize_t read_size,
+			ssize_t start);
 
 /* Test Functions */
 void	print_list(t_list *head);
