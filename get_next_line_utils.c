@@ -6,12 +6,13 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/16 12:06:05 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/16 13:46:04 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+/* Creates a new list element */
 t_list	*lstnew(char *data, ssize_t read_size)
 {
 	t_list	*res;
@@ -24,6 +25,9 @@ t_list	*lstnew(char *data, ssize_t read_size)
 	return (res);
 }
 
+/* Make a duplicate of a char buffer
+	(not a well formed string)
+*/
 char	*strdupl(char *str, ssize_t read_size)
 {
 	ssize_t	i;
@@ -39,21 +43,23 @@ char	*strdupl(char *str, ssize_t read_size)
 	return (res);
 }
 
+/* Adds an element at the end of a list */
 void	lst_push_back(t_list **head, t_list *elem)
 {
 	t_list	*cur;
 
-	cur = *head;
-	if (!cur)
+	if (!*head)
 	{
 		*head = elem;
 		return ;
 	}
+	cur = *head;
 	while (cur->next)
 		cur = cur->next;
 	cur->next = elem;
 }
 
+/* Clears a list */
 void	lst_clear(t_list **head)
 {
 	t_list	*cur;

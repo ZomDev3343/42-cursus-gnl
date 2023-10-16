@@ -6,12 +6,15 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:01 by truello           #+#    #+#             */
-/*   Updated: 2023/10/16 13:29:07 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/16 13:43:13 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+/* Returns the index of the first newline character if found
+	in the string, else returns 0
+*/
 static unsigned char	is_line(char *str, ssize_t read_size)
 {
 	ssize_t	i;
@@ -20,12 +23,13 @@ static unsigned char	is_line(char *str, ssize_t read_size)
 	while (i < read_size)
 	{
 		if (str[i] == '\n' || str[i] == '\0')
-			return (1);
+			return (i);
 		i++;
 	}
 	return (0);
 }
 
+/* Main function to do the get_next_line */
 char	*get_next_line(int fd)
 {
 	static t_list	*line;
