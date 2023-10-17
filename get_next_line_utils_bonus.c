@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/17 17:52:44 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/17 19:32:55 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 /* Creates a new list element */
-t_list	*lstnew(char *data, ssize_t read_size)
+t_list	*lstnew(char *data, ssize_t read_size, int fd)
 {
 	t_list	*res;
 
@@ -21,6 +21,7 @@ t_list	*lstnew(char *data, ssize_t read_size)
 	if (!res || !data || read_size == 0)
 		return (NULL);
 	res->data = data;
+	res->fd = fd;
 	res->read_size = read_size;
 	res->next = NULL;
 	return (res);
@@ -66,19 +67,55 @@ void	lst_push_back(t_list **head, t_list *elem)
 	cur->next = elem;
 }
 
-/* Clears a list */
-void	lst_clear(t_list **head)
+/* Clears the list members with a particular fd property */
+void	lst_clear_fd(t_list **head, int fd)
 {
 	t_list	*cur;
 	t_list	*tmp;
+	t_list	*newhead;
+	t_list	*prev;
 
+	newhead = NULL;
+	prev = NULL;
 	cur = *head;
 	while (cur)
 	{
 		tmp = cur->next;
-		free(cur->data);
-		free(cur);
+		if (cur->fd == fd)
+		{
+			free(cur->data);
+			free(cur);
+			if (prev)
+				prev->next = tmp;
+		}
+		else
+		{
+			prev = cur;
+			if (!newhead)
+				newhead = prev;
+		}
 		cur = tmp;
 	}
-	*head = NULL;
+	*head = newhead;
+}
+
+/* Get the last element of a list with a precise fd */
+t_list	*flfd(t_list *head, int fd, char mode)
+{
+	t_list	*last;
+	t_list	*cur;
+
+	last = NULL;
+	cur = head;
+	while (cur)
+	{
+		if (cur->fd == fd)
+		{
+			if (mode == 'f')
+				return (cur);
+			last = cur;
+		}
+		cur = cur->next;
+	}
+	return (last);
 }
