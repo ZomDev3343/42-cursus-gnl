@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:01 by truello           #+#    #+#             */
-/*   Updated: 2023/10/16 14:42:17 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/17 16:54:11 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,41 +29,53 @@ static unsigned char	is_line(char *str, ssize_t read_size)
 	return (0);
 }
 
+/* Returns the total length of the gotten line */
 static ssize_t	get_line_length(t_list *line)
 {
 	ssize_t	len;
 	ssize_t	newline_idx;
+	t_list	*cur;
 
+	cur = line;
 	len = 0;
-	while (line)
+	while (cur)
 	{
-		newline_idx = is_line(line->data, line->read_size); 
+		newline_idx = is_line(cur->data, cur->read_size); 
 		if (newline_idx)
 			len += newline_idx + 1;
 		else
-			len += line->read_size;
-		line = line->next;
+			len += cur->read_size;
+		cur = cur->next;
 	}
 	return (len);
 }
 
 /* Fill the buffer with all the characters to form the line string*/
-void	make_line(t_list *lst, char *buf, ssize_t len)
+char	*make_line(t_list *lst, ssize_t len)
 {
 	ssize_t	i;
 	ssize_t	j;
+	char	*res;
 
+	if (len == 0)
+		return (NULL);
+	res = (char *) malloc(len + 1);
+	if (!res)
+		return (NULL);
+	res[len] = '\0';
 	i = 0;
 	while (i < len)
 	{
 		j = 0;
 		while (j < lst->read_size && i + j < len)
 		{
-			buf[i + j] = (lst->data)[j];
+			res[i + j] = (lst->data)[j];
 			j++;
 		}
+		lst = lst->next;
 		i += j;
 	}
+	return (res);
 }
 
 /* Returns the well-formed read line and
@@ -73,11 +85,25 @@ static char	*process_list(t_list **lst)
 {
 	char	*res;
 	ssize_t	line_len;
+	t_list	*remain;
+	t_list	*last;
+	ssize_t	nl_idx;
 
+	remain = NULL;
 	line_len = get_line_length(*lst);
-	res = (char *) malloc(line_len + 1);
-	res[line_len] = '\0';
-	make_line(*lst, res, line_len);
+	res = make_line(*lst, line_len);
+	if (!res || !*lst)
+		return (NULL);
+	last = *lst;
+	while (last->next)
+		last = last->next;
+	nl_idx = is_line(last->data, last->read_size);
+	if (nl_idx > 0 && nl_idx < last->read_size - 1)
+		remain = lstnew(strdupl(last->data, last->read_size, nl_idx + 1),
+				last->read_size - nl_idx - 1);
+	lst_clear(lst);
+	if (remain)
+		lst_push_back(lst, remain);
 	return (res);
 }
 
@@ -91,6 +117,8 @@ char	*get_next_line(int fd)
 
 	if (fd == -1)
 		return (NULL);
+	if (line && is_line(line->data, line->read_size))
+		return (process_list(&line));
 	readline = (char *) malloc(BUFFER_SIZE);
 	rs = read(fd, readline, BUFFER_SIZE);
 	while (rs > 0)
@@ -103,8 +131,6 @@ char	*get_next_line(int fd)
 	free(readline);
 	if (!line)
 		return (NULL);
-	//print_list(line);
 	res = process_list(&line);
-	lst_clear(&line);
 	return (res);
 }

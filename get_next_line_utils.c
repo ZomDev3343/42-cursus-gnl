@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/16 14:07:22 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/17 16:49:19 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_list	*lstnew(char *data, ssize_t read_size)
 		return (NULL);
 	res->data = data;
 	res->read_size = read_size;
+	res->next = NULL;
 	return (res);
 }
 
@@ -31,14 +32,16 @@ t_list	*lstnew(char *data, ssize_t read_size)
 char	*strdupl(char *str, ssize_t read_size, ssize_t start)
 {
 	char	*res;
+	ssize_t	i;
 
+	i = start;
 	if (start >= read_size)
 		return (NULL);
-	res = (char *) malloc(read_size);
-	while (start < read_size)
+	res = (char *) malloc(read_size - start);
+	while (i < read_size)
 	{
-		res[start] = (unsigned char) str[start];
-		start++;
+		res[i - start] = (unsigned char) str[i];
+		i++;
 	}
 	return (res);
 }
@@ -73,5 +76,5 @@ void	lst_clear(t_list **head)
 		free(cur);
 		cur = tmp;
 	}
-	*head = 0;
+	*head = NULL;
 }
