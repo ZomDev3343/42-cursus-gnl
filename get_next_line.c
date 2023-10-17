@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:01 by truello           #+#    #+#             */
-/*   Updated: 2023/10/17 17:33:37 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/17 17:45:05 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* Returns the index of the first newline character if found
 	in the string, else returns 0
 */
-static char	is_line(char *str, ssize_t read_size)
+static int	is_line(char *str, ssize_t read_size)
 {
 	ssize_t	i;
 
