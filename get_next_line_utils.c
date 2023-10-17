@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/17 16:49:19 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/17 17:26:31 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@ char	*strdupl(char *str, ssize_t read_size, ssize_t start)
 	ssize_t	i;
 
 	i = start;
-	if (start >= read_size)
+	if (start < 0 || read_size <= 0 || start >= read_size)
 		return (NULL);
 	res = (char *) malloc(read_size - start);
+	if (!res)
+		return (NULL);
 	while (i < read_size)
 	{
 		res[i - start] = (unsigned char) str[i];

@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:01 by truello           #+#    #+#             */
-/*   Updated: 2023/10/17 17:03:16 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/17 17:33:37 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* Returns the index of the first newline character if found
 	in the string, else returns 0
 */
-static unsigned char	is_line(char *str, ssize_t read_size)
+static char	is_line(char *str, ssize_t read_size)
 {
 	ssize_t	i;
 
@@ -26,7 +26,7 @@ static unsigned char	is_line(char *str, ssize_t read_size)
 			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 /* Returns the total length of the gotten line */
@@ -38,10 +38,12 @@ static ssize_t	get_line_length(t_list *line)
 
 	cur = line;
 	len = 0;
+	if (!line)
+		return (0);
 	while (cur)
 	{
 		newline_idx = is_line(cur->data, cur->read_size); 
-		if (newline_idx)
+		if (newline_idx >= 0)
 			return (len + newline_idx + 1);
 		else
 			len += cur->read_size;
@@ -57,7 +59,7 @@ char	*make_line(t_list *lst, ssize_t len)
 	ssize_t	j;
 	char	*res;
 
-	if (len == 0)
+	if (len == 0 || !lst)
 		return (NULL);
 	res = (char *) malloc(len + 1);
 	if (!res)
@@ -116,19 +118,21 @@ char	*get_next_line(int fd)
 
 	if (fd == -1)
 		return (NULL);
-	if (line && is_line(line->data, line->read_size))
+	if (line && is_line(line->data, line->read_size) >= 0)
 		return (process_list(&line));
 	readline = (char *) malloc(BUFFER_SIZE);
+	if (!readline)
+		return (NULL);
 	rs = read(fd, readline, BUFFER_SIZE);
 	while (rs > 0)
 	{
 		lst_push_back(&line, lstnew(strdupl(readline, rs, 0), rs));
-		if (is_line(readline, rs))
+		if (is_line(readline, rs) >= 0)
 			break ;
 		rs = read(fd, readline, BUFFER_SIZE);
 	}
 	free(readline);
-	if (!line)
-		return (NULL);
+	if (rs == -1)
+		lst_clear(&line);
 	return (process_list(&line));
 }
