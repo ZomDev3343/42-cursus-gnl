@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:01 by truello           #+#    #+#             */
-/*   Updated: 2023/10/17 16:54:11 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/17 17:03:16 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static ssize_t	get_line_length(t_list *line)
 	{
 		newline_idx = is_line(cur->data, cur->read_size); 
 		if (newline_idx)
-			len += newline_idx + 1;
+			return (len + newline_idx + 1);
 		else
 			len += cur->read_size;
 		cur = cur->next;
@@ -98,7 +98,7 @@ static char	*process_list(t_list **lst)
 	while (last->next)
 		last = last->next;
 	nl_idx = is_line(last->data, last->read_size);
-	if (nl_idx > 0 && nl_idx < last->read_size - 1)
+	if (nl_idx >= 0 && nl_idx < last->read_size - 1)
 		remain = lstnew(strdupl(last->data, last->read_size, nl_idx + 1),
 				last->read_size - nl_idx - 1);
 	lst_clear(lst);
@@ -113,7 +113,6 @@ char	*get_next_line(int fd)
 	static t_list	*line;
 	char			*readline;
 	ssize_t			rs;
-	char			*res;
 
 	if (fd == -1)
 		return (NULL);
@@ -131,6 +130,5 @@ char	*get_next_line(int fd)
 	free(readline);
 	if (!line)
 		return (NULL);
-	res = process_list(&line);
-	return (res);
+	return (process_list(&line));
 }
