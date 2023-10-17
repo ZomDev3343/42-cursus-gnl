@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:01 by truello           #+#    #+#             */
-/*   Updated: 2023/10/17 17:45:05 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/17 18:00:29 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ char	*get_next_line(int fd)
 	static t_list	*line;
 	char			*readline;
 	ssize_t			rs;
+	t_list			*new_elem;
 
 	if (fd == -1)
 		return (NULL);
@@ -126,13 +127,14 @@ char	*get_next_line(int fd)
 	rs = read(fd, readline, BUFFER_SIZE);
 	while (rs > 0)
 	{
-		lst_push_back(&line, lstnew(strdupl(readline, rs, 0), rs));
+		new_elem = lstnew(strdupl(readline, rs, 0), rs);
+		lst_push_back(&line, new_elem);
 		if (is_line(readline, rs) >= 0)
 			break ;
 		rs = read(fd, readline, BUFFER_SIZE);
 	}
 	free(readline);
-	if (rs == -1)
+	if (rs == -1 || !new_elem)
 		lst_clear(&line);
 	return (process_list(&line));
 }

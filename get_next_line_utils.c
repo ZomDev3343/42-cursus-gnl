@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/17 17:26:31 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/17 17:52:44 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_list	*lstnew(char *data, ssize_t read_size)
 	t_list	*res;
 
 	res = (t_list *) malloc(sizeof(t_list));
-	if (!res)
+	if (!res || !data || read_size == 0)
 		return (NULL);
 	res->data = data;
 	res->read_size = read_size;
@@ -35,7 +35,7 @@ char	*strdupl(char *str, ssize_t read_size, ssize_t start)
 	ssize_t	i;
 
 	i = start;
-	if (start < 0 || read_size <= 0 || start >= read_size)
+	if (!str || start < 0 || read_size <= 0 || start >= read_size)
 		return (NULL);
 	res = (char *) malloc(read_size - start);
 	if (!res)
@@ -53,6 +53,8 @@ void	lst_push_back(t_list **head, t_list *elem)
 {
 	t_list	*cur;
 
+	if (!elem)
+		return ;
 	if (!*head)
 	{
 		*head = elem;
