@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/18 12:25:40 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/18 12:54:47 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	lst_push_back(t_list **head, t_list *elem)
 
 	if (!elem)
 		return ;
+	elem->next = NULL;
 	if (!*head)
 	{
 		*head = elem;
@@ -70,13 +71,11 @@ void	lst_push_back(t_list **head, t_list *elem)
 /* Clears the list members with a particular fd property */
 void	lst_clear_fd(t_list **head, int fd)
 {
+	t_list	*newlist;
 	t_list	*cur;
 	t_list	*tmp;
-	t_list	*newhead;
-	t_list	*prev;
 
-	newhead = NULL;
-	prev = NULL;
+	newlist = NULL;
 	cur = *head;
 	while (cur)
 	{
@@ -85,18 +84,12 @@ void	lst_clear_fd(t_list **head, int fd)
 		{
 			free(cur->data);
 			free(cur);
-			if (prev)
-				prev->next = tmp;
 		}
 		else
-		{
-			prev = cur;
-			if (!newhead)
-				newhead = prev;
-		}
+			lst_push_back(&newlist, cur);
 		cur = tmp;
 	}
-	*head = newhead;
+	*head = newlist;
 }
 
 /* Get the last element of a list with a precise fd */
