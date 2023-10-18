@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:44:22 by truello           #+#    #+#             */
-/*   Updated: 2023/10/17 19:03:31 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/18 12:22:52 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ typedef struct s_list
 }	t_list;
 
 char	*get_next_line(int fd);
+int  is_line(char *str, ssize_t read_size);
 
 void	lst_push_back(t_list **head, t_list *elem);
-t_list	*flfd(t_list *head, int fd, char mode);
+t_list	*flfd(t_list **head, int fd, char mode);
 void	lst_clear_fd(t_list **head, int fd);
 t_list	*lstnew(char *data, ssize_t read_size, int fd);
 char	*strdupl(char *str, ssize_t read_size,

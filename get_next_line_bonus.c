@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/* ***********************i*************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:01 by truello           #+#    #+#             */
-/*   Updated: 2023/10/17 20:04:35 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/18 12:23:22 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* Returns the index of the first newline character if found
 	in the string, else returns 0
 */
-static int	is_line(char *str, ssize_t read_size)
+int	is_line(char *str, ssize_t read_size)
 {
 	ssize_t	i;
 
@@ -101,9 +101,14 @@ static char	*process_list(t_list **lst, int fd)
 	remain = NULL;
 	line_len = get_line_length(*lst, fd);
 	res = make_line(*lst, line_len, fd);
-	if (!res || !*lst)
+	if (!res)
 		return (NULL);
-	last = flfd(*lst, fd, 'l');
+	last = flfd(lst, fd, 'l');
+	if (!*lst || !last)
+	{
+		free(res);
+		return (NULL);
+	}
 	nl_idx = is_line(last->data, last->read_size);
 	if (nl_idx >= 0 && nl_idx < last->read_size - 1)
 		remain = lstnew(strdupl(last->data, last->read_size, nl_idx + 1),
@@ -124,7 +129,7 @@ char	*get_next_line(int fd)
 
 	if (fd == -1)
 		return (NULL);
-	if (line)
+	if (line && flfd(&line, fd, 'x'))
 		return (process_list(&line, fd));
 	readline = (char *) malloc(BUFFER_SIZE);
 	if (!readline)

@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:52 by truello           #+#    #+#             */
-/*   Updated: 2023/10/17 19:32:55 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/18 12:25:40 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,22 +100,25 @@ void	lst_clear_fd(t_list **head, int fd)
 }
 
 /* Get the last element of a list with a precise fd */
-t_list	*flfd(t_list *head, int fd, char mode)
+t_list	*flfd(t_list **head, int fd, char mode)
 {
 	t_list	*last;
 	t_list	*cur;
 
 	last = NULL;
-	cur = head;
+	cur = *head;
 	while (cur)
 	{
 		if (cur->fd == fd)
 		{
-			if (mode == 'f')
+			if (mode == 'f' || (mode == 'x'
+					&& is_line(cur->data, cur->read_size) >= 0))
 				return (cur);
 			last = cur;
 		}
 		cur = cur->next;
 	}
+	if (mode == 'x')
+		return (NULL);
 	return (last);
 }
