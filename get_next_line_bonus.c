@@ -6,7 +6,7 @@
 /*   By: truello <truello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:28:01 by truello           #+#    #+#             */
-/*   Updated: 2023/10/18 12:32:08 by truello          ###   ########.fr       */
+/*   Updated: 2023/10/18 15:01:57 by truello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static ssize_t	get_line_length(t_list *line, int fd)
 	{
 		if (cur->fd == fd)
 		{
-			newline_idx = is_line(cur->data, cur->read_size); 
+			newline_idx = is_line(cur->data, cur->read_size);
 			if (newline_idx >= 0)
 				return (len + newline_idx + 1);
 			else
